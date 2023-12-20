@@ -12,3 +12,4 @@ struct PostsResponse: Decodable {
     var last: Bool
     // Other properties...
 }
+

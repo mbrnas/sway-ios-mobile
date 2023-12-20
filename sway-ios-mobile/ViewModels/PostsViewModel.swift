@@ -14,8 +14,8 @@ class PostsViewModel: ObservableObject {
     func fetchPosts() {
         guard !isLoading, !isLastPage else { return }
 
-        isLoading = true
-        let urlString = "http://localhost:8080/api/v1/user/posts/all-posts?pageNumber=\(currentPage)&pageSize=10"
+           isLoading = true
+           let urlString = "http://localhost:8080/api/v1/user/posts/all-posts?pageNumber=\(currentPage)&pageSize=10" // Use a fixed pageSize
         guard let url = URL(string: urlString) else { return }
 
         var request = URLRequest(url: url)
@@ -49,6 +49,7 @@ class PostsViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+
 
     var canLoadMorePosts: Bool {
         return !isLastPage && !isLoading

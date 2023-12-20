@@ -7,16 +7,26 @@
 
 import SwiftUI
 
+
 struct MainAppView: View {
     @State private var isLoggedIn: Bool = true
+    @StateObject private var viewModel = PostsViewModel() // Create the viewModel here
+
 
     var body: some View {
         TabView {
-            PostsView(logoutAction: {
-                self.isLoggedIn = false
-            })
-            .tabItem {
-                Label("Posts", systemImage: "number.circle.fill")
+            NavigationView {
+                PostsView(logoutAction: {
+                    self.isLoggedIn = false
+                })
+                .onAppear {
+                    if viewModel.posts.isEmpty {
+                        viewModel.fetchPosts()
+                    }
+                }
+                .tabItem {
+                    Label("Posts", systemImage: "number.circle.fill")
+                }
             }
 
             DashboardView(logoutAction: {
@@ -30,5 +40,5 @@ struct MainAppView: View {
           
         }
     }
-    
 }
+

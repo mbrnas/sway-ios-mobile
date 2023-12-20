@@ -15,7 +15,7 @@ struct PostsView: View {
                            PostCardView(post: post, purpleColor: purpleColor)
                        }
 
-                       if true {
+                       if viewModel.canLoadMorePosts {
                            Button("Load More Posts") {
                                viewModel.fetchPosts()
                            }
