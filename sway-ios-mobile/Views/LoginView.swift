@@ -11,9 +11,9 @@ struct LoginView: View {
         VStack {
             Spacer() // Push content down
 
-            Text("Code Chronicles")
+            Text("Sway")
                 .font(.largeTitle)
-                .foregroundColor(.blue)
+                .foregroundColor(Color(hex: "00A9FF"))
                 .padding(.bottom, 30)
 
             VStack(spacing: 20) {
@@ -33,7 +33,7 @@ struct LoginView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color(hex: "00A9FF"))
                     .cornerRadius(10)
             }
             .padding(.horizontal, 20)

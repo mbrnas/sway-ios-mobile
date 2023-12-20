@@ -2,17 +2,18 @@ import Foundation
 import SwiftUI
 
 struct PostsView: View {
-    @StateObject var viewModel = PostsViewModel()
+    @ObservedObject var viewModel: PostsViewModel // Use an observed object passed from the parent view
+
     var logoutAction: () -> Void
 
-    let purpleColor = Color(hexString: "7B66FF")
+    let customColor = Color(hex: "00A9FF")
 
     var body: some View {
            NavigationView {
                ScrollView {
                    LazyVStack(spacing: 15) {
                        ForEach(viewModel.posts, id: \.id) { post in
-                           PostCardView(post: post, purpleColor: purpleColor)
+                           PostCardView(post: post, customColor: customColor)
                        }
 
                        if viewModel.canLoadMorePosts {
@@ -20,7 +21,7 @@ struct PostsView: View {
                                viewModel.fetchPosts()
                            }
                            .padding()
-                           .background(purpleColor)
+                           .background(Color(hex: "00A9FF"))
                            .foregroundColor(.white)
                            .cornerRadius(8)
                        }
@@ -34,7 +35,7 @@ struct PostsView: View {
             .navigationBarItems(trailing: Button(action: logoutAction) {
                 Image(systemName: "power")
                     .imageScale(.large)
-                    .foregroundColor(purpleColor)
+                    .foregroundColor(customColor)
             })
         }
         .onAppear {
@@ -47,20 +48,20 @@ struct PostsView: View {
 
 struct PostCardView: View {
     var post: Post
-    let purpleColor: Color
+    let customColor: Color
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Circle()
-                    .fill(purpleColor)
+                    .fill(customColor)
                     .frame(width: 50, height: 50)
                     .overlay(Text("U").font(.title).foregroundColor(.white))
 
                 VStack(alignment: .leading) {
                     Text(post.user.username)
                         .font(.headline)
-                        .foregroundColor(purpleColor)
+                        .foregroundColor(customColor)
                     Text(post.datePosted)
                         .font(.caption)
                         .foregroundColor(.gray)
@@ -77,7 +78,7 @@ struct PostCardView: View {
             Text(post.title)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(purpleColor)
+                .foregroundColor(customColor)
             
             Text(post.content)
                 .font(.body)
@@ -87,7 +88,7 @@ struct PostCardView: View {
             HStack {
                 Button(action: { /* Like action */ }) {
                     Label("\(post.likes)", systemImage: "heart.fill")
-                        .foregroundColor(purpleColor)
+                        .foregroundColor(customColor)
                 }
                 .buttonStyle(BorderlessButtonStyle())
 

@@ -1,44 +1,46 @@
-//
-//  MainAppView.swift
-//  sway-ios-mobile
-//
-//  Created by Matija Brnas on 20.12.2023..
-//
-
 import SwiftUI
-
 
 struct MainAppView: View {
     @State private var isLoggedIn: Bool = true
-    @StateObject private var viewModel = PostsViewModel() // Create the viewModel here
+    @StateObject private var viewModel = PostsViewModel()
 
+    // Add a callback to notify the parent view
+    var onLogout: () -> Void
 
     var body: some View {
         TabView {
             NavigationView {
-                PostsView(logoutAction: {
+                PostsView(viewModel: viewModel, logoutAction: {
                     self.isLoggedIn = false
+                    self.onLogout() // Notify the parent view when logging out
                 })
                 .onAppear {
                     if viewModel.posts.isEmpty {
                         viewModel.fetchPosts()
                     }
                 }
-                .tabItem {
-                    Label("Posts", systemImage: "number.circle.fill")
-                }
+            }
+            .tabItem {
+                Label("Posts", systemImage: "number.circle.fill")
             }
 
-            DashboardView(logoutAction: {
-                self.isLoggedIn = false
-            })
+            NavigationView {
+                DashboardView(logoutAction: {
+                    self.isLoggedIn = false
+                    self.onLogout() // Notify the parent view when logging out
+                })
+            }
             .tabItem {
                 Label("Dashboard", systemImage: "lock.doc")
             }
         }
         .onAppear {
-          
+            // Any code that needs to run when this view appears
         }
     }
+    
+    // Initialize with a callback function
+    init(onLogout: @escaping () -> Void) {
+        self.onLogout = onLogout
+    }
 }
-

@@ -3,20 +3,22 @@ import SwiftUI
 struct HeroView: View {
     var onContinue: () -> Void
 
-    let purpleColor = Color(hex: "7B66FF")
+    //let purpleColor = Color(hex: "7B66FF")
+
+    let customColor = Color(hex: "00A9FF")
 
     var body: some View {
         VStack(spacing: 20) {
             Spacer()
-            Text("Welcome to Your Blogging Journey")
+            Text("Welcome to Sway")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-                .foregroundColor(purpleColor)
+                .foregroundColor(customColor)
                 .multilineTextAlignment(.center)
                 .padding()
 
             Text("Discover, create, and share your thoughts with the world.")
-                .foregroundColor(purpleColor)
+                .foregroundColor(customColor)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
@@ -26,7 +28,7 @@ struct HeroView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(purpleColor)
+                    .background(customColor)
                     .cornerRadius(10)
             }
             .padding()
