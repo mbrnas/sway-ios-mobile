@@ -1,110 +1,107 @@
 import Foundation
 import SwiftUI
 
-struct PostsView: View {
-    @ObservedObject var viewModel: PostsViewModel // Use an observed object passed from the parent view
+import SwiftUI
 
+struct PostsView: View {
+    @ObservedObject var viewModel: PostsViewModel
     var logoutAction: () -> Void
 
-    let customColor = Color(hex: "00A9FF")
-
     var body: some View {
-           NavigationView {
-               ScrollView {
-                   LazyVStack(spacing: 15) {
-                       ForEach(viewModel.posts, id: \.id) { post in
-                           PostCardView(post: post, customColor: customColor)
-                       }
+        NavigationView {
+            ZStack {
+                Color(.systemBackground).edgesIgnoringSafeArea(.all)
 
-                       if viewModel.canLoadMorePosts {
-                           Button("Load More Posts") {
-                               viewModel.fetchPosts()
-                           }
-                           .padding()
-                           .background(Color(hex: "00A9FF"))
-                           .foregroundColor(.white)
-                           .cornerRadius(8)
-                       }
-                          
-                       
-                   }
-                   .padding()
-               }
-            .navigationTitle("Posts")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(trailing: Button(action: logoutAction) {
-                Image(systemName: "power")
-                    .imageScale(.large)
-                    .foregroundColor(customColor)
-            })
-        }
-        .onAppear {
-            if viewModel.posts.isEmpty {
-                            viewModel.fetchPosts()
+                ScrollView {
+                    LazyVStack(spacing: 20) {
+
+                        ForEach(viewModel.posts, id: \.id) { post in
+                            PostCardView(post: post)
+                                .frame(width: 360, height: 400)
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                .shadow(color: .gray, radius: 10, x: 0, y: 10)
+                                .padding(.top, 10)
                         }
+
+
+
+                        if viewModel.canLoadMorePosts {
+                            Button("Load More Posts") {
+                                viewModel.fetchPosts()
+                            }
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        }
+                    }
+                }
+            }
+            .navigationBarTitle("Posts", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: logoutAction) {
+                Image(systemName: "power").foregroundColor(.blue)
+            })
         }
     }
 }
+
+
 
 struct PostCardView: View {
     var post: Post
-    let customColor: Color
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
+            // User Info
             HStack {
                 Circle()
-                    .fill(customColor)
+                    .fill(LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .top, endPoint: .bottom))
                     .frame(width: 50, height: 50)
-                    .overlay(Text("U").font(.title).foregroundColor(.white))
+                    .overlay(Text("U").foregroundColor(.white))
 
-                VStack(alignment: .leading) {
-                    Text(post.user.username)
-                        .font(.headline)
-                        .foregroundColor(customColor)
-                    Text(post.datePosted)
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(post.user.username).font(.headline)
+                    Text(post.datePosted).font(.caption).foregroundColor(.gray)
                 }
-
                 Spacer()
-
-                Button(action: { /* More actions */ }) {
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.gray)
-                }
             }
 
+            // Post Title
             Text(post.title)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(customColor)
-            
+                .lineLimit(2)
+                .truncationMode(.tail)
+
+            // Post Content
             Text(post.content)
                 .font(.body)
                 .lineLimit(4)
-                .padding(.top, 2)
+                .truncationMode(.tail)
+                .padding(.vertical, 2)
 
+            // Like Button and Count
             HStack {
                 Button(action: { /* Like action */ }) {
                     Label("\(post.likes)", systemImage: "heart.fill")
-                        .foregroundColor(customColor)
+                        .foregroundColor(.red)
                 }
-                .buttonStyle(BorderlessButtonStyle())
-
                 Spacer()
-
-                // Additional actions can be added here
             }
         }
         .padding()
+        .frame(width: 360, height: 400, alignment: .topLeading)
         .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 5)
+        .cornerRadius(15)
+        .shadow(color: .gray, radius: 10, x: 0, y: 10)
     }
 }
 
-// Existing Color extension for hex color support
+
+
+
+
 extension Color {
     init(hexString: String) {
         let scanner = Scanner(string: hexString)
