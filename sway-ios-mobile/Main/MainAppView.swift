@@ -23,6 +23,7 @@ struct MainAppView: View {
             .tabItem {
                 Label("Posts", systemImage: "number.circle.fill")
             }
+            
 
             NavigationView {
                 DashboardView(logoutAction: {

@@ -6,6 +6,7 @@ import SwiftUI
 struct PostsView: View {
     @ObservedObject var viewModel: PostsViewModel
     var logoutAction: () -> Void
+    @State private var selectedPost: Post? = nil
 
     var body: some View {
         NavigationView {
@@ -14,21 +15,19 @@ struct PostsView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 20) {
-
-                        ForEach(viewModel.posts, id: \.id) { post in
+                        ForEach(viewModel.displayedPosts, id: \.id) { post in
                             PostCardView(post: post)
                                 .frame(width: 360, height: 400)
-                                .background(Color.white)
-                                .cornerRadius(15)
-                                .shadow(color: .gray, radius: 10, x: 0, y: 10)
-                                .padding(.top, 10)
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedPost = post
+                                    }
+                                }
                         }
-
-
 
                         if viewModel.canLoadMorePosts {
                             Button("Load More Posts") {
-                                viewModel.fetchPosts()
+                                viewModel.loadMorePosts()
                             }
                             .padding()
                             .background(Color.blue)
@@ -37,19 +36,40 @@ struct PostsView: View {
                         }
                     }
                 }
+                .blur(radius: selectedPost != nil ? 3 : 0)
+
+                if let selectedPost = selectedPost {
+                    PostCardView(post: selectedPost)
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 440)
+                        .onTapGesture {
+                            withAnimation {
+                                self.selectedPost = nil
+                            }
+                        }
+                        .transition(.scale)
+                        .zIndex(1)
+                }
             }
             .navigationBarTitle("Posts", displayMode: .inline)
             .navigationBarItems(trailing: Button(action: logoutAction) {
                 Image(systemName: "power").foregroundColor(.blue)
             })
         }
+        .navigationViewStyle(StackNavigationViewStyle()) // Add this line
     }
 }
 
 
 
+
+
+
+
+
+
 struct PostCardView: View {
     var post: Post
+    var isSelected: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -91,10 +111,11 @@ struct PostCardView: View {
             }
         }
         .padding()
-        .frame(width: 360, height: 400, alignment: .topLeading)
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(color: .gray, radius: 10, x: 0, y: 10)
+        .padding()
+                .frame(width: 360, height: 400, alignment: .topLeading)
+                .background(Color.white)
+                .cornerRadius(15)
+                .shadow(color: .gray, radius: 10, x: 0, y: 10)
     }
 }
 

@@ -3,19 +3,15 @@ import Combine
 import SwiftUI
 
 class PostsViewModel: ObservableObject {
-    @Published var posts: [Post] = []
-    private var cancellables = Set<AnyCancellable>()
+    @Published var posts: [Post] = []      // All fetched posts
+    @Published var displayedPosts: [Post] = [] // Posts to display in the UI
 
-    private var currentPage = 0
-    private var totalPages = 1
-    private var isLastPage = false
-    private var isLoading = false
+    private var cancellables = Set<AnyCancellable>()
+    private var currentLoadIndex = 0
+    private let loadIncrement = 5           // Number of posts to load each time
 
     func fetchPosts() {
-        guard !isLoading, !isLastPage else { return }
-
-           isLoading = true
-           let urlString = "http://localhost:8080/api/v1/user/posts/all-posts?pageNumber=\(currentPage)&pageSize=10" // Use a fixed pageSize
+        let urlString = "http://localhost:8080/api/v1/user/posts/all-posts"
         guard let url = URL(string: urlString) else { return }
 
         var request = URLRequest(url: url)
@@ -26,32 +22,30 @@ class PostsViewModel: ObservableObject {
 
         URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
-            .decode(type: PostsResponse.self, decoder: JSONDecoder())
+            .decode(type: [Post].self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
-                DispatchQueue.main.async {
-                    self?.isLoading = false
-                }
                 switch completion {
                 case .failure(let error):
                     print("Error: \(error)")
                 case .finished:
                     break
                 }
-            }, receiveValue: { [weak self] response in
-                DispatchQueue.main.async {
-                    self?.posts.append(contentsOf: response.content)
-                    self?.currentPage += 1
-                    self?.totalPages = response.totalPages
-                    self?.isLastPage = response.last
-                    print("Current Page: \(self?.currentPage ?? -1), Total Pages: \(self?.totalPages ?? -1), Is Last Page: \(self?.isLastPage ?? true), Is Loading: \(self?.isLoading ?? true)")
-                }
+            }, receiveValue: { [weak self] fetchedPosts in
+                self?.posts = fetchedPosts
+                self?.loadMorePosts()  // Load initial set of posts
             })
             .store(in: &cancellables)
     }
 
+    func loadMorePosts() {
+        let nextIndex = currentLoadIndex + loadIncrement
+        let newPosts = posts[currentLoadIndex..<min(nextIndex, posts.count)]
+        displayedPosts.append(contentsOf: newPosts)
+        currentLoadIndex = nextIndex
+    }
 
     var canLoadMorePosts: Bool {
-        return !isLastPage && !isLoading
+        currentLoadIndex < posts.count
     }
 }
