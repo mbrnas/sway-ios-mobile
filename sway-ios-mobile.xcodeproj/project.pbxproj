@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D40789E92B46154D00576B2F /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40789E82B46154D00576B2F /* CreatePostView.swift */; };
 		D4DE228F2B32EE0200584E6C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE228E2B32EE0200584E6C /* Post.swift */; };
 		D4DE22912B32EE1700584E6C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE22902B32EE1700584E6C /* User.swift */; };
 		D4DE22932B32EE2300584E6C /* PostsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE22922B32EE2300584E6C /* PostsResponse.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D40789E82B46154D00576B2F /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
 		D4DE228E2B32EE0200584E6C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		D4DE22902B32EE1700584E6C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D4DE22922B32EE2300584E6C /* PostsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsResponse.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				D4DE576E2B32EA19008A0F54 /* RootView.swift */,
 				D4DE57702B32EA22008A0F54 /* SignupView.swift */,
 				D4DE22982B32EE5500584E6C /* PostsView.swift */,
+				D40789E82B46154D00576B2F /* CreatePostView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				D4DE22972B32EE4300584E6C /* PostsViewModel.swift in Sources */,
 				D4DE57752B32EA51008A0F54 /* SignInRequest.swift in Sources */,
 				D4DE57772B32EA5A008A0F54 /* SignInResponse.swift in Sources */,
+				D40789E92B46154D00576B2F /* CreatePostView.swift in Sources */,
 				D4DE22992B32EE5500584E6C /* PostsView.swift in Sources */,
 				D4DE57582B32E91B008A0F54 /* sway_ios_mobileApp.swift in Sources */,
 				D4DE229C2B32F04F00584E6C /* MainAppView.swift in Sources */,

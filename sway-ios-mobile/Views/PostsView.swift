@@ -36,7 +36,7 @@ struct PostsView: View {
                         }
                     }
                 }
-                .blur(radius: selectedPost != nil ? 3 : 0)
+                .blur(radius: selectedPost != nil ? 4 : 0)
 
                 if let selectedPost = selectedPost {
                     PostCardView(post: selectedPost)
@@ -51,9 +51,9 @@ struct PostsView: View {
                 }
             }
             .navigationBarTitle("Posts", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: logoutAction) {
-                Image(systemName: "power").foregroundColor(.blue)
-            })
+                    .navigationBarItems(trailing: Button(action: logoutAction) {
+                        Image(systemName: "power").foregroundColor(.blue)
+                    })
         }
         .navigationViewStyle(StackNavigationViewStyle()) // Add this line
     }
